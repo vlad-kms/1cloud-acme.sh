@@ -1,4 +1,4 @@
-# Plugin for working acme.sh with DNS provider 1cloud.ru
+## Plugin for working acme.sh with DNS provider 1cloud.ru
 
 ----
 1. First you need to login to your account to get your API key from: https://panel.1cloud.ru/account/manage?pid=<id_account>#api-key.
