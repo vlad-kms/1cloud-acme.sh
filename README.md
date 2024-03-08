@@ -2,6 +2,7 @@
 
 ----
 First you need to login to your account to get your API key from: https://panel.1cloud.ru/account/manage?pid=<id_account>#api-key.
+
 Second, copy the file to one of acme's plugin file locations.
 
 export OC_Key="<key>"
