@@ -8,7 +8,7 @@ Ok, let's issue a cert now:
 
 ./acme.sh --issue --dns dns_1cloud -d example.com -d *.example.com
 
-The SL_Key will be saved in ~/.acme.sh/account.conf and will be reused when needed.
+The OC_Key will be saved in ~/.acme.sh/account.conf and will be reused when needed.
 
 ---
 Плагин для работы acme.sh с dns провайдером 1cloud.ru
