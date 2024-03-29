@@ -17,7 +17,7 @@ dns_1cloud_add() {
 
   if [ -z "$OC_Key" ]; then
     OC_Key=""
-    _err "You don't specify selectel.ru api key yet."
+    _err "You don't specify 1cloud.ru api key yet."
     _err "Please create you key and try again."
     return 1
   fi
