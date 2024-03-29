@@ -39,6 +39,8 @@ dns_1cloud_add() {
   if _oc_rest POST "recordtxt/" "{\"DomainId\": \"$_domain_id\", \"TTL\": 60, \"Name\": \"$fulldomain\", \"Text\": \"$txtvalue\"}"; then
     if _contains "$response" "$txtvalue" || _contains "$response" 'Подобная запись для данного домена уже существует'; then
       _info "Added, OK"
+      # HACK если раскомментировать, то в основной скрипт в $dns_entry к имени _acme-challenge.domain.dd добавиться символ '.' 
+      #dns_entry=$(echo $dns_entry |sed -nE "s/([^,]*,)([^,]*)(,.*)/\1\2.\3/pg")
       return 0
     fi
   fi
@@ -124,7 +126,7 @@ _get_root() {
   else
     is_jq=1
   fi;
-  # TODO потом удалить
+  # HACK установка в 0 отменяет применение jq даже при его наличии
   #is_jq=0
   _debug "Installed jq is" $is_jq
 
