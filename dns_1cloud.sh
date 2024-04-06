@@ -57,7 +57,7 @@ dns_1cloud_rm() {
 
   if [ -z "$OC_Key" ]; then
     OC_Key=""
-    _err "You don't specify slectel api key yet."
+    _err "You don't specify 1cloud api key yet."
     _err "Please create you key and try again."
     return 1
   fi
