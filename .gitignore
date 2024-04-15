@@ -2,4 +2,5 @@
 !.gitignore
 !README.md
 !dnsapi/dns_selectel.sh
+!dns_1cloud.sh
 !.gitattributes
