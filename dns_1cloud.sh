@@ -34,8 +34,6 @@ dns_1cloud_add() {
   if _oc_rest POST "recordtxt/" "{\"DomainId\": \"$_domain_id\", \"TTL\": 60, \"Name\": \"$fulldomain\", \"Text\": \"$txtvalue\"}"; then
     if _contains "$response" "$txtvalue" || _contains "$response" 'Подобная запись для данного домена уже существует'; then
       _info "Added, OK"
-      # HACK если раскомментировать, то в основной скрипт в $dns_entry к имени _acme-challenge.domain.dd добавиться символ '.' 
-      #dns_entry=$(echo $dns_entry |sed -nE "s/([^,]*,)([^,]*)(,.*)/\1\2.\3/pg")
       return 0
     fi
   fi
@@ -69,16 +67,17 @@ dns_1cloud_rm() {
   _debug3 response "$response"
   if ! _contains "$response" "$txtvalue"; then
     _err "TXT record not found"
+    # нет в ответе txtvalue"
     return 0
   fi
   _record_id=$(echo "$response" | sed -nE "s/.*(\"LinkedRecords\" *: *\[)([^]]*)\].*/\2/p" | sed -nE "s/.*(\{[^{]*\"ID\" *: *([[:digit:]]*),[^}]*\"Text\" *: *\"[\]\"${txtvalue}[^}]*\}).*/\2/p")
   _debug2 "_record_id" "$_record_id"
   if [ -z "$_record_id" ]; then
     _err "can not find _record_id"
-    return 1
+    return 0
   fi
   if ! _oc_rest DELETE "/$_domain_id/$_record_id"; then
-    _err "Delete record error."
+    _err "delete record error."
     return 1
   fi
   return 0
@@ -129,8 +128,8 @@ _oc_rest() {
   else
     response="$(_get "$OC_Api/$ep")"
   fi
-
-  if [ "$?" != "0" ]; then
+  r="$?"
+  if [ "$r" != "0" ]; then
     _err "error $ep"
     return 1
   fi
