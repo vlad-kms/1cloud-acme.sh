@@ -62,12 +62,12 @@ dns_1cloud_rm() {
   _debug _domain_id "$_domain_id"
   _debug "Getting txt records"
   #####################################
-  # инфа о корневом домене и его записях
+  # information about the root domain and its records
   _oc_rest GET "/${_domain_id}"
   _debug3 response "$response"
   if ! _contains "$response" "$txtvalue"; then
+    # no txtvalue in response
     _err "TXT record not found"
-    # нет в ответе txtvalue"
     return 0
   fi
   _record_id=$(echo "$response" | sed -nE "s/.*(\"LinkedRecords\" *: *\[)([^]]*)\].*/\2/p" | sed -nE "s/.*(\{[^{]*\"ID\" *: *([[:digit:]]*),[^}]*\"Text\" *: *\"[\]\"${txtvalue}[^}]*\}).*/\2/p")
@@ -86,12 +86,12 @@ dns_1cloud_rm() {
 ####################  Private functions below ##################################
 #_acme-challenge.www.domain.com
 #returns
-# _domain     - корневой домен
-# _domain_id  - id домена
+# _domain     - root domain
+# _domain_id  - id domain
 _get_root() {
   domain=$1
-  # у 1cloud корневым доменом может быть только домен 2-го уровня
-  # получаем корневой и субдомен домены для переданной записи
+  # in 1cloud, the root domain can only be a 2nd level domain;
+  # we get the root and subdomain domains for the transferred record
   count_word="$(echo "$domain" | tr '.' ' ' | wc -w)"
   if [ "$count_word" -lt 3 ]; then
     _err "Error domain NAME"
@@ -99,12 +99,12 @@ _get_root() {
   fi
   _domain=$(echo "$domain" | cut -d. -f $(("$count_word"-1))-100)
   _debug _domain "$_domain"
-  # список зарегистрированных доменов на 1Cloud
+  # list of registered domains on 1Cloud
   if ! _oc_rest GET "/"; then
     _err "get domains from hostinger"
     return 1
   fi
-  # надо проверить наличие запись для домена среди полученных доменов от провайдера в $response и в ней получить ID
+  # you need to check the presence of an entry for the domain among the domains received from the provider in $response and get the ID in it
   _domain_id=$(echo "$response" | sed -nE "s/.*(\"ID\":)([[:digit:]]*)(.\"Name\":\"$_domain\").*/\2/p")
   if [ -z "$_domain_id" ]; then
     _err "domain ID: is not"
